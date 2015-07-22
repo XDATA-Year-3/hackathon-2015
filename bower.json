@@ -1,0 +1,9 @@
+{
+  "name": "sxdata-hackathon-2015",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "~1.11",
+    "bootstrap": "~3.3"
+  },
+  "private": true
+}
