@@ -15,7 +15,7 @@ var gulp = require("gulp"),
     stylus = require("gulp-stylus"),
     uglify = require("gulp-uglify"),
     stylishJshint = require("jshint-stylish"),
-    bower = require('gulp-bower'),
+    bower = require("gulp-bower"),
     _ = require("underscore");
 
 (function () {
@@ -109,7 +109,7 @@ gulp.task("bower", function () {
     "use strict";
 
     return bower()
-        .pipe(gulp.dest('./build/site/assets/bower_components'))
+        .pipe(gulp.dest("./build/site/assets/bower_components"));
 });
 
 gulp.task("clean", function () {
