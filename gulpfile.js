@@ -109,7 +109,7 @@ gulp.task("bower", function () {
     "use strict";
 
     return bower()
-        .pipe(gulp.dest("./build/site/assets/bower_components"));
+        .pipe(gulp.dest("./build/site/bower_components"));
 });
 
 gulp.task("clean", function () {
