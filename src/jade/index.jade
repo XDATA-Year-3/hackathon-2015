@@ -1,0 +1,29 @@
+doctype html
+head
+    title Hackathon 2015
+
+    script(src="plugin/tangelo/tangelo.js")
+
+    link(rel="stylesheet" href="assets/bootstrap.min.css")
+    link(rel="stylesheet" href="index.css")
+
+    script(src="assets/jquery-1.11.2.min.js")
+    script(src="index.js")
+
+body
+    nav.navbar.navbar-default
+        .container-fluid
+            .navbar-header
+                a.navbar-brand Hackathon 2015
+
+    .container-fluid
+        .row
+            .col-md-6.height100.border(style="background-color: #803040")
+                h1 left
+            .col-md-6(style="background-color: #30b040")
+                .row
+                    .col-md-12.height50.border(style="background-color: #304080")
+                        h1 right top
+                .row
+                    .col-md-12.height50.border(style="background-color: blueviolet")
+                        h1 right bottom
