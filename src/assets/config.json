@@ -1,0 +1,5 @@
+{
+    "graphHost": "localhost",
+    "graphDatabase": "hackathon2015",
+    "graphCollection": "similarity"
+}
