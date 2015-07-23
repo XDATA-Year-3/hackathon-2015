@@ -60,9 +60,9 @@ $(function(){
             error: function (jqxhr, textStatus, reason) {
                 console.log("ERROR", textStatus);
             }
-        }); 
+        });
     }
-    
+
 
     var queryBody = function(s,e){
 
@@ -71,8 +71,6 @@ $(function(){
         $.ajax({
             url: query,
             success: function (response) {
-                
-    
                 var tbody = d3.select("#mainTable tbody")
 
                 tbody.selectAll(".tableRow").remove();
@@ -81,28 +79,21 @@ $(function(){
                 var tableRowEnter = tbody.selectAll(".tableRow").data(response.res).enter().append("tr").attr({
                     "class":"tableRow"
                 })
-                
+
                 var tableCell = tableRowEnter.selectAll(".tableCell").data(function(d){return d;})
                 .enter().append("td").attr({
                     "class":"tableCell"
                 })
-                
+
                 tableCell.text(function(d){return d;})
-                
-    
-    
             },
             error: function (jqxhr, textStatus, reason) {
                 console.log("ERROR", textStatus);
             }
         });
-
-
-}
-    
+    }
 
     queryHeader();
-
 
     d3.select("#plus").on({
         "click": function () {
@@ -127,11 +118,4 @@ $(function(){
             }
         }
     })
-
-
-
-
-
-
-
 })
