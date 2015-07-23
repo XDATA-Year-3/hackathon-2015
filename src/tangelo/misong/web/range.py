@@ -4,7 +4,7 @@ import sqlite3
 import tangelo
 
 @tangelo.types(start=int, end=int)
-def run(start, end, fields="*", sort="rowid"):
+def run(start, end, fields="*", sort="rowid", name=None):
     config = tangelo.plugin_config()
     dbName = config["database_name"]
 
@@ -13,14 +13,14 @@ def run(start, end, fields="*", sort="rowid"):
 
     print sort
 
-    # for speedup
-    if sort=="rowid":
-        c.execute('SELECT '+fields+' FROM "'+dbName+'" LIMIT ?,?;',( start, end-start))
+    if name is not None:
+        c.execute('SELECT %s FROM "%s" WHERE artist_name="%s" LIMIT ?,?;' % (fields, dbName, name), (start, end-start))
+    elif sort=="rowid":
+        # for speedup
+        c.execute('SELECT %s FROM "%s" LIMIT ?,?;' % (fields, dbName),( start, end-start))
     else:
         print "THIS"
-
-
-        c.execute('SELECT '+fields+' FROM "'+dbName+'" ORDER BY "'+sort+'"  LIMIT ?,?;',(start,end))
+        c.execute('SELECT %s FROM "%s" ORDER BY "%s"  LIMIT ?,?;' % (fields, dbName, name),(start,end-start))
 
     res = c.fetchall()
     conn.close()
