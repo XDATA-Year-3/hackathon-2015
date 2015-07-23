@@ -15,12 +15,10 @@ def run(start, end, fields="*", sort="rowid"):
 
     # for speedup
     if sort=="rowid":
-        c.execute('SELECT '+fields+' FROM "'+dbName+'" LIMIT ?,?;',( start, end-start))
+        c.execute('SELECT %s FROM "%s" LIMIT ?,?;' % (fields, dbName),( start, end-start))
     else:
         print "THIS"
-
-
-        c.execute('SELECT '+fields+' FROM "'+dbName+'" ORDER BY "'+sort+'"  LIMIT ?,?;',(start,end))
+        c.execute('SELECT %s FROM "%s" ORDER BY "%s"  LIMIT ?,?;' % (fields, dbName, sort),(start,end))
 
     res = c.fetchall()
     conn.close()
