@@ -3,3 +3,6 @@ plugins:
 
     - name: mongo
       path: src/tangelo/mongo
+
+    - name: misong
+      path: src/tangelo/misong

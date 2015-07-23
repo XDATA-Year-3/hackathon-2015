@@ -1,0 +1,32 @@
+// Created by hen on 7/22/15.
+
+doctype html
+html(lang="en")
+   head
+      title= pageTitle
+      script(src="../../../../bower_components/jquery/dist/jquery.min.js")
+      script(src="../../../../bower_components/underscore/underscore-min.js")
+      script(src="../../../../bower_components/backbone/backbone-min.js")
+      script(src="../../../../bower_components/d3/d3.min.js")
+      script(src="simpleTable.js")
+
+      link(rel="stylesheet" href="../../../../bower_components/bootswatch/simplex/bootstrap.min.css")
+      link(rel="stylesheet" href="simpleTable.css")
+
+body
+    nav.navbar.navbar-default
+        .container-fluid
+            .navbar-header
+                a.navbar-brand Hackathon 2015
+
+                //button.btn.navbar-btn.btn-sm abc
+                button.btn.navbar-btn.btn-default.btn-sm#minus(style="margin:3px;") -100
+                button.btn.navbar-btn.btn-default.btn-sm#plus(style="margin:3px;") +100
+                span#currentPos(style="margin:3px;") ---
+
+    .container-fluid
+        .row
+            .col-md-12.height100.no-padding.border
+                table#mainTable
+                    thead
+                    tbody
