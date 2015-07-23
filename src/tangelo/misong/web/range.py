@@ -18,7 +18,7 @@ def run(start, end, fields="*", sort="rowid"):
         c.execute('SELECT %s FROM "%s" LIMIT ?,?;' % (fields, dbName),( start, end-start))
     else:
         print "THIS"
-        c.execute('SELECT %s FROM "%s" ORDER BY "%s"  LIMIT ?,?;' % (fields, dbName, sort),(start,end))
+        c.execute('SELECT %s FROM "%s" ORDER BY "%s"  LIMIT ?,?;' % (fields, dbName, name),(start,end-start))
 
     res = c.fetchall()
     conn.close()
