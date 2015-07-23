@@ -3,7 +3,7 @@ __author__ = 'hen'
 import sqlite3
 import tangelo
 
-
+@tangelo.types(start=int, end=int)
 def run(start, end, fields="*", sort="rowid"):
     config = tangelo.plugin_config()
     dbName = config["database_name"]
@@ -15,7 +15,7 @@ def run(start, end, fields="*", sort="rowid"):
 
     # for speedup
     if sort=="rowid":
-        c.execute('SELECT '+fields+' FROM "'+dbName+'" LIMIT ?,?;',( start,end))
+        c.execute('SELECT '+fields+' FROM "'+dbName+'" LIMIT ?,?;',( start, end-start))
     else:
         print "THIS"
 
