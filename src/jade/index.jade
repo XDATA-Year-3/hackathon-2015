@@ -3,6 +3,8 @@ head
     title Hackathon 2015
 
     link(rel="stylesheet" href="bower_components/bootswatch/paper/bootstrap.min.css")
+    link(rel="stylesheet" href="http://vcglab.org/lineup.js/css/style.css")
+    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
     link(rel="stylesheet" href="index.css")
 
     script(src="bower_components/jquery/dist/jquery.min.js")
@@ -10,6 +12,7 @@ head
     script(src="bower_components/backbone/backbone-min.js")
     script(src="bower_components/d3/d3.min.js")
     script(src="bower_components/webcola/WebCola/cola.min.js")
+    script(src="bower_components/lineupjs/dist/LineUpJS.min.js")
 
     script(src="plugin/tangelo/tangelo.js")
 
@@ -30,10 +33,10 @@ body
         .row
             .col-md-6.height100.no-padding.border
                 svg#clique(width="100%" height="100%" style="background-color: aliceblue")
-            .col-md-6(style="background-color: #30b040")
+            .col-md-6
                 .row
-                    .col-md-12.height50.border(style="background-color: #304080")
-                        h1 right top
+                    .col-md-12.height50.border(style="overflow-y:scroll; overflow-x:hidden")
+                        #lineup
                 .row
                     .col-md-12.height50.border(style="background-color: blueviolet")
                         h1 right bottom

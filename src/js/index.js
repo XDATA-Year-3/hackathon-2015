@@ -1,5 +1,5 @@
 /*jshint browser: true, jquery: true */
-/*global _, clique, tangelo, app, delv */
+/*global _, clique, tangelo, app, delv, LineUp, d3 */
 
 $(function () {
     "use strict";
@@ -22,7 +22,8 @@ $(function () {
         var graph,
             view,
             cliqueSelection,
-            dummy;
+            dummy,
+            lineup;
 
         // Initialize Clique.
         window.graph = graph = new clique.Graph({
@@ -38,6 +39,44 @@ $(function () {
             model: graph,
             el: "#clique"
         });
+
+        // Initialize LineUp.
+        (function () {
+            var storage,
+                data,
+                columns;
+
+            data = [
+                {foo: 0.4,
+                 bar: "roni"},
+
+                {foo: 0.7,
+                 bar: "hendrik"}
+            ];
+
+            columns = [
+                {column: "foo",
+                 type: "number",
+                 domain: [0,1]},
+
+                {column: "bar",
+                 type: "string"}
+            ];
+
+            _.each(_.range(100), function (i) {
+                var n = _.clone(data[1]);
+                n.bar += i;
+                data.push(n);
+            });
+
+            storage = LineUp.createLocalStorage(data, columns, null, "bar");
+
+            lineup = LineUp.create(storage, d3.select("#lineup"), {
+                svgLayout: {
+                    addPlusSigns: true
+                }
+            });
+        }());
 
         // Initialize Delv.
         app.delv = {};
