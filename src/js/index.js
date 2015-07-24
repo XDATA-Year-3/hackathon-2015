@@ -11,10 +11,9 @@ $(function () {
 
     DummyView = function () {
         return {
-            react: function (invoker, dataset, attribute) {
-                console.log("invoker", invoker);
-                console.log("dataset", dataset);
-                console.log("attribute", attribute);
+            react: function (invoker, dataset, ids) {
+                console.log(app.delv.dataIF.getSelectedItems(dataset, "name"));
+                console.log(app.delv.dataIF.getAllItems(dataset, "name"));
             }
         };
     };
@@ -45,17 +44,19 @@ $(function () {
         app.delv.dataIF = new delv.data("data");
         delv.addDataIF(app.delv.dataIF);
         app.delv.dataIF.setDelvIF(delv);
-        cliqueSelection = app.delv.dataIF.addDataSet("clique_selection");
+        window.cliqueSelection = cliqueSelection = app.delv.dataIF.addDataSet("clique_selection");
+
+        cliqueSelection.addAttribute(new delv.attribute("name", delv.AttributeType.UNSTRUCTURED, new delv.colorMap(["210", "210", "210"]), new delv.dataRange()));
 
         app.delv.clique = new delv.d3View("clique");
         app.delv.clique.dataIF("data");
 
         view.model.on("change", function (m) {
-            var keys = _.pluck(m.get("nodes"), "key");
             cliqueSelection.clearItems();
 
-            _.each(keys, function (key) {
-                cliqueSelection.addId(key);
+            _.each(m.get("nodes"), function (node) {
+                cliqueSelection.addId(node.key);
+                cliqueSelection.setItem("name", node.key, node.data.name);
             });
         });
 
