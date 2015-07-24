@@ -11,7 +11,7 @@ $(function () {
 
     DummyView = function () {
         return {
-            react: function (invoker, dataset, ids) {
+            react: function (invoker, dataset) {
                 console.log(app.delv.dataIF.getSelectedItems(dataset, "name"));
                 console.log(app.delv.dataIF.getAllItems(dataset, "name"));
             }
