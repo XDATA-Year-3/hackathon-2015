@@ -14,6 +14,25 @@ $(function () {
             react: function (invoker, dataset) {
                 console.log(app.delv.dataIF.getSelectedItems(dataset, "name"));
                 console.log(app.delv.dataIF.getAllItems(dataset, "name"));
+            },
+
+            lineup: function (invoker, dataset) {
+                var all = app.delv.dataIF.getAllItems(dataset, "name"),
+                    selected = app.delv.dataIF.getSelectedItems(dataset, "name"),
+                    lookups;
+
+                lookups = _.map(selected, function (s) {
+                    return $.getJSON("plugin/misong/range/0/100", {
+                        name: s
+                    });
+                });
+
+                $.when.apply($, lookups)
+                    .done(function () {
+                        _.each(_.pluck(arguments, 0), function (songs) {
+                            console.log(songs);
+                        });
+                    });
             }
         };
     };
@@ -108,6 +127,7 @@ $(function () {
         delv.addView(dummy, "dummy");
 
         delv.connectToSignal("selectedIdsChanged", "dummy", "react");
+        delv.connectToSignal("selectedIdsChanged", "dummy", "lineup");
     };
 
     $.getJSON("assets/config.json")
