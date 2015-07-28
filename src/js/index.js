@@ -1,19 +1,57 @@
 /*jshint browser: true, jquery: true */
-/*global _, clique, tangelo, app, delv */
+/*global _, clique, tangelo, app, delv, LineUp, d3 */
 
 $(function () {
     "use strict";
 
     var initialize,
-        DummyView;
+        DummyView,
+        columns;
 
     window.app = {};
 
-    DummyView = function () {
+    columns = [
+        {column: "artist_name", type: "string"},
+        {column: "title", type: "string"},
+        {column: "release", type: "string"},
+        {column: "duration", type: "number", domain: [0, 600]},
+        {column: "loudness", type: "number", domain: [-30, 0]},
+        {column: "tempo", type: "number", domain: [0, 200]}
+    ];
+
+    DummyView = function (lineup) {
         return {
-            react: function (invoker, dataset, ids) {
+            react: function (invoker, dataset) {
                 console.log(app.delv.dataIF.getSelectedItems(dataset, "name"));
                 console.log(app.delv.dataIF.getAllItems(dataset, "name"));
+            },
+
+            lineup: function (invoker, dataset) {
+                var selected = app.delv.dataIF.getSelectedItems(dataset, "name"),
+                    lookups;
+
+                lookups = _.map(selected, function (s) {
+                    return $.getJSON("plugin/misong/range/0/100", {
+                        name: s,
+                        fields: _.pluck(columns, "column").join(",")
+                    });
+                });
+
+                $.when.apply($, lookups)
+                    .done(function () {
+                        var data = _.map(Array.prototype.concat.apply([], _.pluck(_.pluck(arguments, "0"), "res")), function (song) {
+                            var rec = {};
+                            _.each(_.pluck(columns, "column"), function (col, i) {
+                                rec[col] = song[i];
+                            });
+                            rec.loudness = Number(rec.loudness);
+                            return rec;
+                        });
+
+                        lineup.changeDataStorage({
+                            storage: LineUp.createLocalStorage(data, columns, null, "title")
+                        });
+                    });
             }
         };
     };
@@ -22,7 +60,8 @@ $(function () {
         var graph,
             view,
             cliqueSelection,
-            dummy;
+            dummy,
+            lineup;
 
         // Initialize Clique.
         window.graph = graph = new clique.Graph({
@@ -38,6 +77,15 @@ $(function () {
             model: graph,
             el: "#clique"
         });
+
+        // Initialize LineUp.
+        (function () {
+            lineup = LineUp.create(LineUp.createLocalStorage([], columns, null, "title"), d3.select("#lineup"), {
+                svgLayout: {
+                    addPlusSigns: true
+                }
+            });
+        }());
 
         // Initialize Delv.
         app.delv = {};
@@ -65,10 +113,11 @@ $(function () {
             delvView._dataIF.updateSelectedIds(delvView.svgElem, "clique_selection", _.keys(sel.attributes));
         }, 100));
 
-        dummy = new DummyView();
+        dummy = new DummyView(lineup);
         delv.addView(dummy, "dummy");
 
         delv.connectToSignal("selectedIdsChanged", "dummy", "react");
+        delv.connectToSignal("selectedIdsChanged", "dummy", "lineup");
     };
 
     $.getJSON("assets/config.json")
