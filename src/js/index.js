@@ -5,11 +5,21 @@ $(function () {
     "use strict";
 
     var initialize,
-        DummyView;
+        DummyView,
+        columns;
 
     window.app = {};
 
-    DummyView = function () {
+    columns = [
+        {column: "artist_name", type: "string"},
+        {column: "title", type: "string"},
+        {column: "release", type: "string"},
+        {column: "duration", type: "number", domain: [0, 600]},
+        {column: "loudness", type: "number", domain: [-30, 0]},
+        {column: "tempo", type: "number", domain: [0, 200]}
+    ];
+
+    DummyView = function (lineup) {
         return {
             react: function (invoker, dataset) {
                 console.log(app.delv.dataIF.getSelectedItems(dataset, "name"));
@@ -17,20 +27,29 @@ $(function () {
             },
 
             lineup: function (invoker, dataset) {
-                var all = app.delv.dataIF.getAllItems(dataset, "name"),
-                    selected = app.delv.dataIF.getSelectedItems(dataset, "name"),
+                var selected = app.delv.dataIF.getSelectedItems(dataset, "name"),
                     lookups;
 
                 lookups = _.map(selected, function (s) {
                     return $.getJSON("plugin/misong/range/0/100", {
-                        name: s
+                        name: s,
+                        fields: _.pluck(columns, "column").join(",")
                     });
                 });
 
                 $.when.apply($, lookups)
                     .done(function () {
-                        _.each(_.pluck(arguments, 0), function (songs) {
-                            console.log(songs);
+                        var data = _.map(Array.prototype.concat.apply([], _.pluck(_.pluck(arguments, "0"), "res")), function (song) {
+                            var rec = {};
+                            _.each(_.pluck(columns, "column"), function (col, i) {
+                                rec[col] = song[i];
+                            });
+                            rec.loudness = Number(rec.loudness);
+                            return rec;
+                        });
+
+                        lineup.changeDataStorage({
+                            storage: LineUp.createLocalStorage(data, columns, null, "title")
                         });
                     });
             }
@@ -61,36 +80,7 @@ $(function () {
 
         // Initialize LineUp.
         (function () {
-            var storage,
-                data,
-                columns;
-
-            data = [
-                {foo: 0.4,
-                 bar: "roni"},
-
-                {foo: 0.7,
-                 bar: "hendrik"}
-            ];
-
-            columns = [
-                {column: "foo",
-                 type: "number",
-                 domain: [0,1]},
-
-                {column: "bar",
-                 type: "string"}
-            ];
-
-            _.each(_.range(100), function (i) {
-                var n = _.clone(data[1]);
-                n.bar += i;
-                data.push(n);
-            });
-
-            storage = LineUp.createLocalStorage(data, columns, null, "bar");
-
-            lineup = LineUp.create(storage, d3.select("#lineup"), {
+            lineup = LineUp.create(LineUp.createLocalStorage([], columns, null, "title"), d3.select("#lineup"), {
                 svgLayout: {
                     addPlusSigns: true
                 }
@@ -123,7 +113,7 @@ $(function () {
             delvView._dataIF.updateSelectedIds(delvView.svgElem, "clique_selection", _.keys(sel.attributes));
         }, 100));
 
-        dummy = new DummyView();
+        dummy = new DummyView(lineup);
         delv.addView(dummy, "dummy");
 
         delv.connectToSignal("selectedIdsChanged", "dummy", "react");
