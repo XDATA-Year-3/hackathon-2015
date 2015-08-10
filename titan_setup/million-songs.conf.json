@@ -1,0 +1,220 @@
+{
+    "grexOptions": {
+        "host": "localhost",
+        "port": 8182,
+        "graph": "graph"
+    },
+    "port": 18000,
+    "showDebugMessages": true,
+    "logAllQueries": true,
+    "nodeLabelAttribute": "FakeLabel",
+    "idAttribute": "dataId",
+    "searchableAttributes": {
+        "Album": [
+            {
+                "Property": "release",
+                "DataType": "String.class",
+                "SearchMethod": "com.thinkaurelius.titan.core.attribute.Text.REGEX"
+            }
+        ],
+        "Artist": [
+            {
+                "Property": "artist_name",
+                "DataType": "String.class",
+                "SearchMethod": "com.thinkaurelius.titan.core.attribute.Text.REGEX"
+            },{
+                "Property": "artist_location",
+                "DataType": "String.class",
+                "SearchMethod": "com.thinkaurelius.titan.core.attribute.Text.REGEX"
+            }
+        ],
+        "Song": [
+            {
+                "Property": "title",
+                "DataType": "String.class",
+                "SearchMethod": "com.thinkaurelius.titan.core.attribute.Text.REGEX"
+            }
+        ],
+        "Tag": [
+            {
+                "Property": "tag",
+                "DataType": "String.class",
+                "SearchMethod": "com.thinkaurelius.titan.core.attribute.Text.REGEX"
+            }
+        ]
+    },
+    "schema": {
+        "nodeTypes": {
+            "Song" : {
+                "title" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "analysis_sample_rate" : {
+                    "dataType" : "Integer.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "danceability" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "duration" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "end_of_fade_in" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "energy" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "key" : {
+                    "dataType" : "Integer.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "key_confidence" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "loudness" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "mode" : {
+                    "dataType" : "Integer.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "mode_confidence" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "song_hotttnesss" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "start_of_fade_out" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "tempo" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "time_signature" : {
+                    "dataType" : "Integer.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "time_signature_confidence" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                }
+            },
+            "Artist" : {
+                "artist_familiarity" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "artist_hotttnesss" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "artist_latitude" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "artist_location" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "artist_longitude" : {
+                    "dataType" : "Float.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "artist_name" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                }
+            },
+            "Album" : {
+                "release" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                },
+                "year" : {
+                    "dataType" : "Integer.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                }
+            },
+            "Tag" : {
+                "tag" : {
+                    "dataType" : "String.class",
+                    "cardinality" : "Cardinality.SINGLE"
+                }
+            }
+        },
+        "edgeTypes": {
+            "contains" : {},
+            "performed" : {},
+            "released" : {},
+            "similar" : {},
+            "musicBrainzTag" : {},
+            "echoNestTag" : {}
+        }
+    },
+    "sources" : {
+        "nodes": [
+            {
+                "data": "/tmp/songs.csv",
+                "label": "Song",
+                "id": "song_id"
+            }, {
+                "data": "/tmp/artists.csv",
+                "label": "Artist",
+                "id": "artist_id"
+            }, {
+                "data": "/tmp/albums.csv",
+                "label": "Album",
+                "id": "album_id"
+            }, {
+                "data": "/tmp/tagNames.csv",
+                "label": "Tag",
+                "id": "tag_id"
+            }
+        ],
+        "edges": [
+            {
+                "data": "/tmp/mbTags.csv",
+                "source": "artist_id",
+                "target": "tag_id",
+                "label": "musicBrainzTag"
+            }, {
+                "data": "/tmp/enTags.csv",
+                "source": "artist_id",
+                "target": "tag_id",
+                "label": "echoNestTag"
+            }, {
+                "data": "/tmp/similarArtists.csv",
+                "source": "target",
+                "target": "similar",
+                "label": "similar"
+            }, {
+                "data": "/tmp/albumSong.csv",
+                "source": "album_id",
+                "target": "song_id",
+                "label": "contains"
+            }, {
+                "data": "/tmp/artistSong.csv",
+                "source": "artist_id",
+                "target": "song_id",
+                "label": "performed"
+            }, {
+                "data": "/tmp/artistAlbum.csv",
+                "source": "artist_id",
+                "target": "album_id",
+                "label": "released"
+            }
+        ]
+    }
+}
